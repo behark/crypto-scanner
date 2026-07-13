@@ -1,0 +1,17 @@
+[Unit]
+Description=Crypto Scanner (hourly gainers + OI + watchlist)
+Documentation=file:///home/behar/Documents/crypto-scanner/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/behar/Documents/crypto-scanner
+ExecStart=/home/behar/Documents/crypto-scanner/.venv/bin/python /home/behar/Documents/crypto-scanner/scanner.py loop
+Restart=on-failure
+RestartSec=60
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=/home/behar/Documents/crypto-scanner/.env
+
+[Install]
+WantedBy=default.target

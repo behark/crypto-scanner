@@ -1,0 +1,19 @@
+[Unit]
+Description=Crypto Phase 0 Watchers (X + Robinhood/BSC chain)
+Documentation=file:///home/behar/Documents/crypto-scanner/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/behar/Documents/crypto-scanner
+ExecStart=/home/behar/Documents/crypto-scanner/.venv/bin/python /home/behar/Documents/crypto-scanner/run_watchers.py
+Restart=on-failure
+RestartSec=30
+Environment=PYTHONUNBUFFERED=1
+
+# Load Telegram credentials
+EnvironmentFile=/home/behar/Documents/crypto-scanner/.env
+
+[Install]
+WantedBy=default.target
