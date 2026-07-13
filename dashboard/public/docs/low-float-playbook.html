@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Low-Float Manipulation Playbook · 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0b0f;
+      --surface: #12141c;
+      --surface-2: #1a1d28;
+      --border: rgba(255,255,255,0.07);
+      --text: #e8eaef;
+      --muted: #8b92a8;
+      --accent: #6ee7b7;
+      --accent-dim: rgba(110,231,183,0.12);
+      --danger: #f87171;
+      --danger-dim: rgba(248,113,113,0.12);
+      --warn: #fbbf24;
+      --warn-dim: rgba(251,191,36,0.12);
+      --info: #60a5fa;
+      --info-dim: rgba(96,165,250,0.12);
+      --radius: 14px;
+      --shadow: 0 24px 80px rgba(0,0,0,0.45);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(110,231,183,0.08), transparent),
+        radial-gradient(ellipse 60% 40% at 90% 10%, rgba(96,165,250,0.06), transparent),
+        radial-gradient(ellipse 50% 30% at 50% 100%, rgba(248,113,113,0.04), transparent);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    header {
+      margin-bottom: 3rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .eyebrow {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: clamp(2.4rem, 6vw, 3.4rem);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 620px;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1.5rem;
+    }
+
+    .pill {
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    nav.toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 2.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    nav.toc h2 {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    nav.toc ol {
+      list-style: none;
+      counter-reset: toc;
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    @media (min-width: 600px) {
+      nav.toc ol { grid-template-columns: 1fr 1fr; }
+    }
+
+    nav.toc li { counter-increment: toc; }
+
+    nav.toc a {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--text);
+      text-decoration: none;
+      padding: 0.4rem 0;
+      font-size: 0.9rem;
+      transition: color 0.15s;
+    }
+
+    nav.toc a::before {
+      content: counter(toc, decimal-leading-zero);
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--accent);
+      opacity: 0.7;
+      min-width: 1.4rem;
+    }
+
+    nav.toc a:hover { color: var(--accent); }
+
+    section {
+      margin-bottom: 3rem;
+      scroll-margin-top: 2rem;
+    }
+
+    h2 {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 1.85rem;
+      font-weight: 400;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.01em;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 1.75rem 0 0.75rem;
+      color: var(--text);
+    }
+
+    p { margin-bottom: 1rem; color: #c5cad6; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+
+    .card.highlight {
+      border-color: rgba(110,231,183,0.25);
+      background: linear-gradient(135deg, var(--surface) 0%, rgba(110,231,183,0.04) 100%);
+    }
+
+    .card.danger {
+      border-color: rgba(248,113,113,0.25);
+      background: linear-gradient(135deg, var(--surface) 0%, rgba(248,113,113,0.04) 100%);
+    }
+
+    .card.warn {
+      border-color: rgba(251,191,36,0.25);
+      background: linear-gradient(135deg, var(--surface) 0%, rgba(251,191,36,0.04) 100%);
+    }
+
+    .card-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .card.highlight .card-label { color: var(--accent); }
+    .card.danger .card-label { color: var(--danger); }
+    .card.warn .card-label { color: var(--warn); }
+
+    .grid-2 {
+      display: grid;
+      gap: 1rem;
+    }
+
+    @media (min-width: 640px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.75rem;
+      margin: 1.25rem 0;
+    }
+
+    .stat {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat .val {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.6rem;
+      line-height: 1.2;
+      display: block;
+    }
+
+    .stat .val.down { color: var(--danger); }
+    .stat .val.up { color: var(--accent); }
+
+    .stat .lbl {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin: 1rem 0;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--surface-2);
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+    }
+
+    .tag.crash { background: var(--danger-dim); color: var(--danger); }
+    .tag.pump { background: var(--accent-dim); color: var(--accent); }
+    .tag.warn-tag { background: var(--warn-dim); color: var(--warn); }
+    .tag.info { background: var(--info-dim); color: var(--info); }
+
+    ul, ol {
+      margin: 0.75rem 0 1rem 1.25rem;
+      color: #c5cad6;
+    }
+
+    li { margin-bottom: 0.4rem; }
+
+    .timeline {
+      position: relative;
+      padding-left: 1.5rem;
+      margin: 1.25rem 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0.35rem;
+      top: 0.4rem;
+      bottom: 0.4rem;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), var(--danger));
+      border-radius: 2px;
+    }
+
+    .tl-item {
+      position: relative;
+      padding-bottom: 1.25rem;
+      padding-left: 1rem;
+    }
+
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -1.22rem;
+      top: 0.45rem;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid var(--accent);
+    }
+
+    .tl-item.crash::before { border-color: var(--danger); }
+
+    .tl-date {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .tl-item.crash .tl-date { color: var(--danger); }
+
+    .checklist {
+      list-style: none;
+      margin-left: 0;
+    }
+
+    .checklist li {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .checklist li:last-child { border-bottom: none; }
+
+    .check-icon {
+      flex-shrink: 0;
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      margin-top: 0.1rem;
+    }
+
+    .check-icon.red { background: var(--danger-dim); color: var(--danger); }
+    .check-icon.green { background: var(--accent-dim); color: var(--accent); }
+    .check-icon.yellow { background: var(--warn-dim); color: var(--warn); }
+
+    .playbook-phase {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .phase-num {
+      flex-shrink: 0;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 8px;
+      background: var(--accent-dim);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .token-card {
+      border-left: 3px solid var(--border);
+      padding-left: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .token-card.lab { border-left-color: var(--danger); }
+    .token-card.velvet { border-left-color: var(--warn); }
+    .token-card.siren { border-left-color: #a78bfa; }
+    .token-card.other { border-left-color: var(--info); }
+
+    .token-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.5rem 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .token-name {
+      font-family: 'Instrument Serif', serif;
+      font-size: 1.5rem;
+    }
+
+    .flow-diagram {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      font-family: 'DM Sans', monospace;
+      font-size: 0.8rem;
+      line-height: 1.8;
+      color: var(--muted);
+      overflow-x: auto;
+      white-space: pre;
+      margin: 1rem 0;
+    }
+
+    .matrix td:first-child { font-weight: 500; color: var(--text); }
+
+    .matrix .yes { color: var(--accent); font-weight: 600; }
+    .matrix .no { color: var(--danger); font-weight: 600; }
+    .matrix .caution { color: var(--warn); font-weight: 600; }
+
+    footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    footer a { color: var(--accent); }
+
+    @media print {
+      body { background: #fff; color: #111; }
+      body::before { display: none; }
+      .card, nav.toc { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">Research · On-chain · July 2026</div>
+      <h1>Low-Float <em>Manipulation</em> Playbook</h1>
+      <p class="subtitle">How to spot insider-controlled pumps before they implode — and when (if ever) to trade them. Case studies: LAB, VELVET, SIREN, and the 2026 token cluster.</p>
+      <div class="meta-row">
+        <span class="pill">Saved Jul 13, 2026</span>
+        <span class="pill">ZachXBT · Bubblemaps · EmberCN</span>
+        <span class="pill">Not financial advice</span>
+      </div>
+    </header>
+
+    <nav class="toc">
+      <h2>Contents</h2>
+      <ol>
+        <li><a href="#buy-or-sell">Buy, Sell, or Avoid?</a></li>
+        <li><a href="#playbook">The Repeatable Playbook</a></li>
+        <li><a href="#spotting">Spotting Checklist</a></li>
+        <li><a href="#lab">LAB Case Study</a></li>
+        <li><a href="#tokens">Token Database</a></li>
+        <li><a href="#tools">Tools &amp; Workflow</a></li>
+        <li><a href="#alerts">Alert Setup</a></li>
+        <li><a href="#rules">Trading Rules</a></li>
+      </ol>
+      <p style="margin-top:1rem;font-size:0.85rem;color:var(--muted)"><a href="index.html" style="color:var(--accent)">All guides</a> · <a href="alert-spotting-guide.html" style="color:var(--accent)">Alert &amp; Spotting Guide</a> · <a href="complete-workflow-guide.html" style="color:var(--accent)">Complete Workflow</a></p>
+    </nav>
+
+    <!-- BUY OR SELL -->
+    <section id="buy-or-sell">
+      <h2>Can You Spot These for Buying — or Only Selling?</h2>
+
+      <div class="card highlight">
+        <div class="card-label">Short answer</div>
+        <p style="margin:0"><strong>Both — but the edge is asymmetric.</strong> The same red flags that warn you to <em>exit</em> are the same signals that can help you <em>ride the pump early</em>. Shorting is the hardest and most dangerous play. Holding through the top is how retail gets destroyed.</p>
+      </div>
+
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>Strategy</th>
+            <th>Edge</th>
+            <th>Risk</th>
+            <th>Verdict</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Buy early pump</td>
+            <td class="yes">High reward if timed</td>
+            <td>Insiders can dump anytime; you're exit liquidity</td>
+            <td class="caution">Possible — strict rules only</td>
+          </tr>
+          <tr>
+            <td>Hold through top</td>
+            <td class="no">None</td>
+            <td>-90% in 48h is normal</td>
+            <td class="no">Never</td>
+          </tr>
+          <tr>
+            <td>Exit when deposits hit CEX</td>
+            <td class="yes">High — on-chain is early warning</td>
+            <td>May leave some upside on table</td>
+            <td class="yes">Best risk/reward</td>
+          </tr>
+          <tr>
+            <td>Short the top</td>
+            <td class="caution">Theoretical</td>
+            <td>Insiders squeeze shorts with thin float</td>
+            <td class="no">ZachXBT discourages</td>
+          </tr>
+          <tr>
+            <td>Buy the "falling knife"</td>
+            <td class="no">Low</td>
+            <td>80M+ tokens may still be held by insiders</td>
+            <td class="no">Avoid (LAB, SIREN post-crash)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Why VELVET &amp; SIREN felt like "good opportunities"</h3>
+      <p>You caught the <strong>pump phase</strong> — the part insiders build on purpose. A thin float + narrative (SpaceX pre-IPO for VELVET, AI agent for SIREN) + futures listing = violent upside. That is tradeable <em>if</em> you treat it as a momentum scalp, not an investment.</p>
+
+      <div class="grid-2">
+        <div class="card warn">
+          <div class="card-label">Pump traders win when</div>
+          <ul>
+            <li>Enter early (before CEX deposit warnings)</li>
+            <li>Position size is small (1–3% of portfolio)</li>
+            <li>Take profit in tiers (25% / 50% / 75%)</li>
+            <li>Hard stop below structure</li>
+            <li>Exit fully on team wallet → exchange flows</li>
+          </ul>
+        </div>
+        <div class="card danger">
+          <div class="card-label">Pump traders lose when</div>
+          <ul>
+            <li>They "believe the narrative"</li>
+            <li>They add on the way up near ATH</li>
+            <li>They ignore Bubblemaps / ZachXBT warnings</li>
+            <li>They short into a squeeze</li>
+            <li>They catch the falling knife after crash</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLAYBOOK -->
+    <section id="playbook">
+      <h2>The Repeatable Playbook</h2>
+      <p>Investigator ZachXBT tied LAB, RAVE, RIVER, SIREN, MYX, SKYAI, and EDGE to the same structure — an alleged market maker operating primarily through Bitget, with Binance and Gate as secondary channels.</p>
+
+      <div class="flow-diagram">Launch (AI/DeFi narrative, BNB Chain)
+    ↓
+Keep 90–95% supply in insider wallets / OTC / treasury
+    ↓
+List on Bitget → Gate → Binance Alpha → Binance Perps
+    ↓
+Deposit millions of tokens to CEX addresses (often dormant weeks)
+    ↓
+Activate market maker → vertical pump → retail FOMO
+    ↓
+Futures OI explodes → liquidations fuel the move
+    ↓
+Insiders distribute via OTC (60–80% discount) + open market sells
+    ↓
+-85% to -97% in days → retail holds the bag</div>
+
+      <h3>Five phases — and where you can act</h3>
+
+      <div class="card">
+        <div class="playbook-phase">
+          <div class="phase-num">1</div>
+          <div>
+            <strong>Stealth accumulation</strong> — Insiders load wallets, OTC deals at steep discounts. <span class="tag info">Hard to see</span>
+          </div>
+        </div>
+        <div class="playbook-phase">
+          <div class="phase-num">2</div>
+          <div>
+            <strong>CEX listing + dormant deposits</strong> — Tokens sit on Bitget/Gate deposit addresses. <span class="tag warn-tag">Watch Arkham, Nansen</span>
+          </div>
+        </div>
+        <div class="playbook-phase">
+          <div class="phase-num">3</div>
+          <div>
+            <strong>Pump activation</strong> — Price goes vertical; volume/OI ratio spikes. <span class="tag pump">Buy zone (small size)</span>
+          </div>
+        </div>
+        <div class="playbook-phase">
+          <div class="phase-num">4</div>
+          <div>
+            <strong>Distribution</strong> — Team wallets move to exchanges and sell. <span class="tag crash">Exit immediately</span>
+          </div>
+        </div>
+        <div class="playbook-phase">
+          <div class="phase-num">5</div>
+          <div>
+            <strong>Collapse</strong> — Liquidity gone; bleeding continues. <span class="tag crash">Do not buy dip</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Two manipulation models (Odaily analysis)</h3>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-label">Model A — Short Squeeze (MYX)</div>
+          <p style="margin:0">Accumulate → lure shorts → liquidate them → pump → insiders short the top and distribute.</p>
+        </div>
+        <div class="card">
+          <div class="card-label">Model B — Pure Pump &amp; Dump (COAI, LAB)</div>
+          <p style="margin:0">&lt;20% circulating at launch → immediate vertical move → no pause → off-exchange OTC extraction.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SPOTTING -->
+    <section id="spotting">
+      <h2>Spotting Checklist</h2>
+      <p>Run this on any token before you buy — and again daily if you're in a position.</p>
+
+      <div class="card">
+        <h3 style="margin-top:0">Supply &amp; Tokenomics</h3>
+        <ul class="checklist">
+          <li><span class="check-icon red">!</span><span><strong>Float &lt; 20%</strong> of total supply circulating</span></li>
+          <li><span class="check-icon red">!</span><span><strong>FDV / Market Cap &gt; 5×</strong> — massive future overhang</span></li>
+          <li><span class="check-icon red">!</span><span><strong>Conflicting supply data</strong> across CoinGecko, CMC, and project docs</span></li>
+          <li><span class="check-icon red">!</span><span><strong>One cluster holds 50–95%</strong> — check Bubblemaps, Arkham</span></li>
+          <li><span class="check-icon yellow">?</span><span><strong>Unlock &gt; 10% of float</strong> in a single day — exit or avoid entry</span></li>
+          <li><span class="check-icon yellow">?</span><span><strong>OTC menus on Telegram/WhatsApp</strong> at 60–80% discount (LAB pattern)</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top:0">On-Chain Signals</h3>
+        <ul class="checklist">
+          <li><span class="check-icon red">!</span><span><strong>Large CEX deposits</strong> (Bitget, Gate, Binance) — especially if dormant then active</span></li>
+          <li><span class="check-icon red">!</span><span><strong>Fresh wallet clusters</strong> receiving millions of tokens before a pump</span></li>
+          <li><span class="check-icon red">!</span><span><strong>Consolidation to 10+ new addresses</strong> days before price spike (LAB: 100M to 10 wallets)</span></li>
+          <li><span class="check-icon yellow">?</span><span><strong>Same wallets across tokens</strong> — SIREN cluster linked to DWF-affiliated addresses</span></li>
+          <li><span class="check-icon green">✓</span><span><strong>Dormant insider wallets wake up</strong> = distribution starting — your exit signal</span></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top:0">Market Structure</h3>
+        <ul class="checklist">
+          <li><span class="check-icon red">!</span><span><strong>Volume ≈ Market Cap</strong> in 24h — entire float changing hands (panic or distribution)</span></li>
+          <li><span class="check-icon red">!</span><span><strong>Volume / Open Interest &gt; 20×</strong> on perps — liquidation-driven pump</span></li>
+          <li><span class="check-icon yellow">?</span><span><strong>Binance Alpha → Perps pipeline</strong> — common 2026 pattern</span></li>
+          <li><span class="check-icon yellow">?</span><span><strong>AI / pre-IPO / agent narrative</strong> with no real user growth</span></li>
+          <li><span class="check-icon red">!</span><span><strong>Founders' prior project rugged</strong> — LAB founders ran Eesee (-93%)</span></li>
+        </ul>
+      </div>
+
+      <div class="card highlight">
+        <div class="card-label">The 60-second screen</div>
+        <ol>
+          <li>Bubblemaps → any cluster &gt; 30%? Stop.</li>
+          <li>tokenunlocks.app → cliff within 2 weeks? Stop or scalp only.</li>
+          <li>FDV/MC ratio → above 5? Extreme caution.</li>
+          <li>Search "[TOKEN] ZachXBT" on X → existing investigation? Strong avoid for holds.</li>
+          <li>Arkham → exchange inflows last 48h? If long, take profit now.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- LAB -->
+    <section id="lab">
+      <h2>LAB Case Study</h2>
+      <p>LAB Trade — AI trading terminal. The clearest 2026 example of a warned collapse that still caught thousands of holders.</p>
+
+      <div class="stat-grid">
+        <div class="stat"><span class="val up">$17–27</span><span class="lbl">Peak (Jul 2026)</span></div>
+        <div class="stat"><span class="val down">$0.34</span><span class="lbl">Low (Jul 13)</span></div>
+        <div class="stat"><span class="val down">-97.9%</span><span class="lbl">1 Week</span></div>
+        <div class="stat"><span class="val up">560×</span><span class="lbl">Launch to peak</span></div>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-date">Oct 2025</div>
+          <strong>Token launch</strong> — $25M valuation. AI trading terminal positioning.
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Mar–May 2026</div>
+          <strong>226M LAB</strong> moved to Bitget deposit addresses. 100M later withdrawn to 10 fresh wallets. ZachXBT publishes investigation: insiders control 95%+.
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Early Jul 2026</div>
+          <strong>Peak ~$14–17</strong> — $14B+ FDV. Retail buys the chart.
+        </div>
+        <div class="tl-item crash">
+          <div class="tl-date">Jul 8, 2026</div>
+          <strong>First cliff: -85% in 24h</strong> — $14 → under $2. Billions erased.
+        </div>
+        <div class="tl-item crash">
+          <div class="tl-date">Jul 10–11, 2026</div>
+          <strong>Team-linked wallets sell 18.4M LAB</strong> (~$18.3M) on Aster DEX. Price $1.20 → $0.55.
+        </div>
+        <div class="tl-item crash">
+          <div class="tl-date">Jul 13, 2026</div>
+          <strong>Bleed to $0.34</strong> — ~81.5M tokens still held by insider cluster. No recovery.
+        </div>
+      </div>
+
+      <h3>What ZachXBT documented</h3>
+      <ul>
+        <li>OTC loans at 5–7.5%/month, repayable in LAB at "market price"</li>
+        <li>WhatsApp OTC menus: 60% discount, 25% guaranteed discount tranches</li>
+        <li>Vesting unilaterally changed from 3 → 9 months for some participants</li>
+        <li>Opaque market-making agreement with unnamed counterparty</li>
+        <li>Multisig signer linked to RIVER manipulation wallet ($12M+ to CEX)</li>
+        <li>Founders (Vova Sadkov, Mark) — prior project Eesee dropped 93%</li>
+      </ul>
+
+      <div class="card danger">
+        <div class="card-label">ZachXBT's position</div>
+        <p style="margin:0">"I do not encourage trading LAB under any circumstances." Also warned against shorting — concentrated supply lets insiders squeeze shorts higher.</p>
+      </div>
+    </section>
+
+    <!-- TOKENS -->
+    <section id="tokens">
+      <h2>Token Database — 2026 Cluster</h2>
+
+      <div class="token-card velvet">
+        <div class="token-header">
+          <span class="token-name">VELVET</span>
+          <span class="tag pump">You caught this</span>
+          <span class="tag warn-tag">Team selling into pump</span>
+        </div>
+        <p>Velvet Capital — DeFi / pre-IPO perps via Trade.xyz (SpaceX, OpenAI, Anthropic exposure).</p>
+        <table>
+          <tr><th>Metric</th><th>Detail</th></tr>
+          <tr><td>Peak</td><td>~$0.90 (Jun 11, 2026) — ~1,400% weekly surge</td></tr>
+          <tr><td>Trigger</td><td>Trade.xyz integration Jun 3; SpaceX narrative drew retail</td></tr>
+          <tr><td>Red flag</td><td>22M VELVET (~$19.8M) from team wallets → Bitget, Gate, KuCoin</td></tr>
+          <tr><td>Red flag</td><td>DWF Labs (market maker) moved 6.68M (~$6M) same period</td></tr>
+          <tr><td>Aftermath</td><td>-73% from ATH; Jul unlocks (10.4M/month × 4) add pressure</td></tr>
+          <tr><td>Lesson</td><td><strong>Good scalp if you exited before Jun 11 deposits.</strong> Not a hold. Same playbook, softer than LAB.</td></tr>
+        </table>
+      </div>
+
+      <div class="token-card siren">
+        <div class="token-header">
+          <span class="token-name">SIREN</span>
+          <span class="tag pump">You caught partially</span>
+          <span class="tag crash">-70% single day</span>
+        </div>
+        <p>BNB Chain AI agent token. "Largely abandoned" after Feb 2025 launch, then revived for pump.</p>
+        <table>
+          <tr><th>Metric</th><th>Detail</th></tr>
+          <tr><td>Peak</td><td>$3.65 (Mar 22, 2026) — 800%+ monthly, $1.5B+ mcap</td></tr>
+          <tr><td>Supply control</td><td>48–88.5% in one cluster (Bubblemaps, Arkham, ZachXBT)</td></tr>
+          <tr><td>Linked to</td><td>DWF Labs addresses (LADYS, RACA, TOMO connections)</td></tr>
+          <tr><td>Warning</td><td>Bubblemaps: "This only ends one way" — hours before crash</td></tr>
+          <tr><td>Crash</td><td>-70% in one day; later Jun 2026 final dump ~92% of supply, ~$64.8M extracted</td></tr>
+          <tr><td>Lesson</td><td><strong>Classic spot-corner + perps profit.</strong> Buy early pump, exit when concentration warnings hit.</td></tr>
+        </table>
+      </div>
+
+      <div class="token-card lab">
+        <div class="token-header">
+          <span class="token-name">LAB</span>
+          <span class="tag crash">-97% week</span>
+        </div>
+        <p>See full case study above. The reference implementation of the playbook.</p>
+      </div>
+
+      <div class="token-card other">
+        <div class="token-header">
+          <span class="token-name">RAVE</span>
+          <span class="tag crash">-95% in 48h</span>
+        </div>
+        <table>
+          <tr><th>Metric</th><th>Detail</th></tr>
+          <tr><td>Peak</td><td>$0.25 → $27 in 9 days ($6B mcap)</td></tr>
+          <tr><td>Trigger dump</td><td>$23M to Bitget deposit addresses → -40% in one move</td></tr>
+          <tr><td>Supply</td><td>~95% insider-controlled per ZachXBT</td></tr>
+        </table>
+      </div>
+
+      <div class="token-card other">
+        <div class="token-header">
+          <span class="token-name">RIVER</span>
+          <span class="tag crash">$80 → $6.78</span>
+        </div>
+        <table>
+          <tr><th>Metric</th><th>Detail</th></tr>
+          <tr><td>Pattern</td><td>Same wallet cluster playbook; LAB multisig linked to RIVER address</td></tr>
+          <tr><td>CEX flows</td><td>$12M+ to centralized exchange deposits</td></tr>
+        </table>
+      </div>
+
+      <div class="token-card other">
+        <div class="token-header">
+          <span class="token-name">MYX</span>
+          <span class="tag warn-tag">Short squeeze model</span>
+        </div>
+        <table>
+          <tr><th>Metric</th><th>Detail</th></tr>
+          <tr><td>Model</td><td>5-phase short squeeze: accumulate → trap shorts → liquidate → pump → distribute</td></tr>
+          <tr><td>Float</td><td>9.21% unlocked at TGE</td></tr>
+        </table>
+      </div>
+
+      <div class="token-card other">
+        <div class="token-header">
+          <span class="token-name">SKYAI</span>
+        </div>
+        <table>
+          <tr><th>Metric</th><th>Detail</th></tr>
+          <tr><td>Pattern</td><td>800M tokens to "airdrop" wallet; fresh addresses; Mar 2026 consolidation to Gate/Bitget</td></tr>
+          <tr><td>Link</td><td>Same on-chain buyer tied to LAB accumulation</td></tr>
+        </table>
+      </div>
+
+      <div class="token-card other">
+        <div class="token-header">
+          <span class="token-name">EDGE</span>
+          <span class="tag crash">-77% Jun 2026</span>
+        </div>
+        <table>
+          <tr><th>Metric</th><th>Detail</th></tr>
+          <tr><td>Context</td><td>EdgeX perp DEX token; team blamed "external manipulation"</td></tr>
+          <tr><td>ZachXBT</td><td>"Supply was being controlled by a few insiders with a low float"</td></tr>
+        </table>
+      </div>
+
+      <h3>Shared wallet trail</h3>
+      <p>Coingo / SpecterAnalyst traced the same wallets across LAB, SKYAI, RIVER, and RAVE. When you see a new token pumping and recognize addresses from a prior collapse — that is not coincidence.</p>
+    </section>
+
+    <!-- TOOLS -->
+    <section id="tools">
+      <h2>Tools &amp; Daily Workflow</h2>
+
+      <table>
+        <thead>
+          <tr><th>Tool</th><th>Use for</th><th>URL</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Bubblemaps</td><td>Wallet clusters, supply concentration</td><td>bubblemaps.io</td></tr>
+          <tr><td>Arkham Intelligence</td><td>Entity labels, CEX deposit tracking</td><td>platform.arkhamintelligence.com</td></tr>
+          <tr><td>Token Unlocks</td><td>Cliff dates, vesting categories</td><td>tokenunlocks.app</td></tr>
+          <tr><td>Nansen / EmberCN</td><td>Smart money flows, exchange deposits</td><td>nansen.ai</td></tr>
+          <tr><td>ZachXBT (X)</td><td>Investigations before crashes</td><td>x.com/zachxbt</td></tr>
+          <tr><td>DeFiLlama / CMC</td><td>FDV, volume, OI cross-check</td><td>defillama.com</td></tr>
+        </tbody>
+      </table>
+
+      <div class="card highlight">
+        <div class="card-label">Daily routine (if in a low-float trade)</div>
+        <ol>
+          <li>Check Arkham for CEX inflows (5 min)</li>
+          <li>Check X for new ZachXBT / Bubblemaps posts (2 min)</li>
+          <li>Compare volume to mcap — spike without news = distribution (1 min)</li>
+          <li>Review unlock calendar — anything within 7 days? (2 min)</li>
+          <li>Set trailing stop or take partial profit every +30% (ongoing)</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ALERTS -->
+    <section id="alerts">
+      <h2>Alert Setup — Quick Reference</h2>
+      <p>Full walkthrough, LAB timeline example, SIREN Bubblemaps reading, and automation roadmap are in the <a href="alert-spotting-guide.html" style="color:var(--accent)">companion guide</a>. Core stack:</p>
+
+      <div class="card highlight">
+        <div class="card-label">The one-sentence system</div>
+        <p style="margin:0;font-family:'Instrument Serif',serif;font-size:1.1rem;font-style:italic">Binance Alpha finds them → Bubblemaps sizes the risk → Lookonchain times your exit → ZachXBT confirms you should have left already.</p>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>Tier</th><th>What to set up</th><th>Catches</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="tag pump">1 — Free</span></td><td>X lists: bubblemaps, lookonchain, EmberCN, zachxbt</td><td>Exit warnings, CEX deposits</td></tr>
+          <tr><td><span class="tag pump">1 — Free</span></td><td>Binance app notifications + Alpha countdown</td><td>New tokens before pump</td></tr>
+          <tr><td><span class="tag pump">1 — Free</span></td><td>Daily: CoinGecko top gainers +50%, mcap &lt;$500M</td><td>Momentum candidates</td></tr>
+          <tr><td><span class="tag warn-tag">2 — Medium</span></td><td>Coinglass OI/funding alerts on perps</td><td>Pump activation, distribution</td></tr>
+          <tr><td><span class="tag warn-tag">2 — Medium</span></td><td>TradingView +30% in 4h / -20% in 1h</td><td>Entry scout / exit scout</td></tr>
+          <tr><td><span class="tag warn-tag">2 — Medium</span></td><td>tokenunlocks.app email alerts</td><td>Cliff unlocks (LAB Jul 14)</td></tr>
+          <tr><td><span class="tag info">3 — Paid</span></td><td>Arkham CEX inflow alerts, Nansen smart money</td><td>Earliest on-chain moves</td></tr>
+        </tbody>
+      </table>
+
+      <h3>LAB timeline — what each alert meant</h3>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-date">May 7–14</div>
+          ZachXBT + EmberCN at ~$6 → <strong>not “avoid forever”</strong> — momentum long still valid with tight stops.
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">Jun 2</div>
+          ATH ~$27 → distribution zone. Don't chase.
+        </div>
+        <div class="tl-item crash">
+          <div class="tl-date">Jun 4</div>
+          Bubblemaps: <em>"This will be ugly"</em> → <strong>EXIT signal</strong> (2 days after peak).
+        </div>
+        <div class="tl-item crash">
+          <div class="tl-date">Jul 8–13</div>
+          -97% to $0.34. ZachXBT post-mortem, not early warning.
+        </div>
+      </div>
+
+      <div class="card warn">
+        <div class="card-label">For futures (long or short)</div>
+        <p style="margin:0">You only need <strong>one</strong> clear signal — rise OR fall. Same data: CEX inflows = short or exit long; fresh listing + low cluster + rising OI = long scalp. See companion guide for the decision flowchart.</p>
+      </div>
+    </section>
+
+    <!-- RULES -->
+    <section id="rules">
+      <h2>Trading Rules — Personal Playbook</h2>
+
+      <div class="grid-2">
+        <div class="card highlight">
+          <div class="card-label">Entry rules</div>
+          <ul>
+            <li>Max 1–3% portfolio per low-float token</li>
+            <li>Only enter Phase 2–3 (post-listing, pre-distribution)</li>
+            <li>Narrative must be fresh (not "already played" like SpaceX)</li>
+            <li>No entry if ZachXBT investigation already live</li>
+            <li>No entry within 2 weeks of major unlock</li>
+            <li>Prefer tokens where you can define risk (clear support level)</li>
+          </ul>
+        </div>
+        <div class="card danger">
+          <div class="card-label">Exit rules (non-negotiable)</div>
+          <ul>
+            <li>Take 50% profit at +50% gain minimum</li>
+            <li>Full exit on any team → CEX transfer report</li>
+            <li>Full exit if Bubblemaps flags &gt;40% cluster</li>
+            <li>Full exit if 24h volume &gt; 50% of mcap</li>
+            <li>Never average down after a -30% dump</li>
+            <li>Never hold low-float tokens overnight unhedged near ATH</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card warn">
+        <div class="card-label">SIREN-style "still falling" — what to watch</div>
+        <p>If SIREN (or any post-crash token) is still bleeding:</p>
+        <ul>
+          <li>Insider wallets may still hold tens of millions of tokens</li>
+          <li>Dead-cat bounces are 10–30% — good for scalps only, not reversals</li>
+          <li>Wait for supply to actually disperse (cluster &lt; 20%) before any "investment" thesis</li>
+          <li>Perp funding negative + rising OI = someone betting on another squeeze — stay cautious</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Mental model</div>
+        <p style="margin:0;font-size:1.05rem;font-family:'Instrument Serif',serif;font-style:italic;color:var(--text)">"You're not investing in a project. You're renting momentum from insiders — and they always take the car back."</p>
+      </div>
+    </section>
+
+    <footer>
+      <p>Compiled from public reports: ZachXBT investigations, Bubblemaps, EmberCN, Crypto Times, CryptoBriefing, Chain Grid News, Coingo analysis, Odaily, CoinTelegraph, Gate Blog (Jul 2026).</p>
+      <p style="margin-top:0.75rem">This document is for education and personal reference only. Cryptocurrency trading carries extreme risk. Past patterns do not guarantee future detection or profits.</p>
+      <p style="margin-top:0.75rem"><a href="index.html">docs/</a> · <a href="../README.md">crypto-scanner repo</a></p>
+    </footer>
+  </div>
+</body>
+</html>

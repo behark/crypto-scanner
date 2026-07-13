@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crypto Scanner · Learning Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0a0b0f; --surface:#12141c; --border:rgba(255,255,255,.07);
+      --text:#e8eaef; --muted:#8b92a8; --accent:#6ee7b7; --accent2:#818cf8;
+      --warn:#fbbf24; --radius:14px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 20% -10%,rgba(110,231,183,.08),transparent),radial-gradient(ellipse 50% 40% at 90% 0%,rgba(129,140,248,.08),transparent);pointer-events:none}
+    .wrap{max-width:880px;margin:0 auto;padding:3rem 1.5rem 4rem;position:relative;z-index:1}
+    .eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+    h1{font-family:'Instrument Serif',serif;font-size:clamp(2.4rem,5vw,3.2rem);font-weight:400;margin-bottom:.75rem}
+    .sub{color:var(--muted);font-size:1.05rem;margin-bottom:2rem;max-width:620px}
+    .grid{display:grid;gap:1rem}
+    @media(min-width:640px){.grid{grid-template-columns:1fr 1fr}}
+    .card{display:block;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;text-decoration:none;color:inherit;transition:border-color .2s,transform .2s}
+    .card:hover{border-color:rgba(110,231,183,.35);transform:translateY(-2px)}
+    .card.featured{grid-column:1/-1;border-color:rgba(129,140,248,.3);background:linear-gradient(135deg,var(--surface),rgba(129,140,248,.06))}
+    .tag{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.5rem}
+    .card .tag{color:var(--accent)}
+    .card.featured .tag{color:var(--accent2)}
+    .card h2{font-family:'Instrument Serif',serif;font-size:1.4rem;font-weight:400;margin-bottom:.5rem}
+    .card p{color:var(--muted);font-size:.9rem;margin:0}
+    .path{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin:2rem 0}
+    .path h2{font-family:'Instrument Serif',serif;font-size:1.5rem;margin-bottom:1rem}
+    .steps{counter-reset:step;list-style:none}
+    .steps li{counter-increment:step;display:flex;gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--border)}
+    .steps li::before{content:counter(step);flex-shrink:0;width:1.75rem;height:1.75rem;border-radius:6px;background:rgba(110,231,183,.12);color:var(--accent);font-weight:700;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+    footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:.8rem;color:var(--muted)}
+    a{color:var(--accent)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow">behark/crypto-scanner · Jul 2026</div>
+    <h1>Learning Hub</h1>
+    <p class="sub">Everything you need to use the scanner, spot LAB-style setups, catch Phase 0 plays like CASHCAT, and actually benefit from the alerts.</p>
+
+    <a href="complete-workflow-guide.html" class="card featured">
+      <div class="tag">Start here</div>
+      <h2>Complete Workflow Guide</h2>
+      <p>Daily process, how to benefit from Telegram alerts, position sizing, when to long/short/ignore, and how to crush it without burning out.</p>
+    </a>
+
+    <div class="grid">
+      <a href="low-float-playbook.html" class="card">
+        <div class="tag">Theory</div>
+        <h2>Low-Float Playbook</h2>
+        <p>LAB, SIREN, VELVET, RAVE — the insider pump playbook, case studies, trading rules.</p>
+      </a>
+      <a href="alert-spotting-guide.html" class="card">
+        <div class="tag">Signals</div>
+        <h2>Alert &amp; Spotting Guide</h2>
+        <p>Rise vs fall, Bubblemaps reading, LAB timeline, X alert stack, automation.</p>
+      </a>
+      <a href="tools-reference.html" class="card">
+        <div class="tag">Tools</div>
+        <h2>Tools Reference</h2>
+        <p>Every tool that helps — Bubblemaps, DexScreener, Coinglass, Arkham, and when to use each.</p>
+      </a>
+      <a href="cashcat-case-study.html" class="card">
+        <div class="tag">Case study</div>
+        <h2>CASHCAT Breakdown</h2>
+        <p>merts_eth Jul 5 call, $85→$2M story, Elite gate vs sniper timing.</p>
+      </a>
+    </div>
+
+    <div class="path">
+      <h2>Recommended reading order</h2>
+      <ol class="steps">
+        <li><div><strong>Complete Workflow</strong> — understand the system you already run</div></li>
+        <li><div><strong>Tools Reference</strong> — bookmark the sites you'll open on every alert</div></li>
+        <li><div><strong>Low-Float Playbook</strong> — learn what you're avoiding (LAB) and riding (momentum)</div></li>
+        <li><div><strong>Alert &amp; Spotting Guide</strong> — deepen signal reading</div></li>
+        <li><div><strong>CASHCAT case study</strong> — real example of Phase 0 vs viral phase</div></li>
+      </ol>
+    </div>
+
+    <div class="path">
+      <h2>Scanner quick commands</h2>
+      <pre style="background:#0d0f14;border:1px solid var(--border);border-radius:10px;padding:1rem;font-size:.85rem;color:#a8b0c4;overflow-x:auto">cd ~/Documents/crypto-scanner
+./test_telegram.sh
+systemctl --user status crypto-watchers
+.venv/bin/python scanner.py analyze cash-cat</pre>
+    </div>
+
+    <footer>
+      <p><a href="https://github.com/behark/crypto-scanner">github.com/behark/crypto-scanner</a> · Not financial advice.</p>
+    </footer>
+  </div>
+</body>
+</html>

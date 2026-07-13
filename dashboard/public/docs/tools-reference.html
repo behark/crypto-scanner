@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tools Reference · Crypto Scanner</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0a0b0f;--surface:#12141c;--surface2:#1a1d28;--border:rgba(255,255,255,.07);--text:#e8eaef;--muted:#8b92a8;--accent:#6ee7b7;--info:#60a5fa;--warn:#fbbf24;--radius:14px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:15px}
+    .wrap{max-width:920px;margin:0 auto;padding:3rem 1.5rem 4rem}
+    .eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+    h1{font-family:'Instrument Serif',serif;font-size:clamp(2rem,4.5vw,2.8rem);font-weight:400;margin-bottom:1rem}
+    h2{font-family:'Instrument Serif',serif;font-size:1.5rem;margin:2rem 0 .75rem}
+    p{color:#c5cad6;margin-bottom:1rem}
+    a{color:var(--accent)}
+    table{width:100%;border-collapse:collapse;font-size:.88rem;margin:1rem 0}
+    th,td{padding:.75rem 1rem;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+    th{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);background:var(--surface2)}
+    .tier{display:inline-block;font-size:.65rem;font-weight:700;padding:.2rem .5rem;border-radius:4px;margin-right:.25rem}
+    .t1{background:rgba(110,231,183,.15);color:var(--accent)}
+    .t2{background:rgba(96,165,250,.15);color:var(--info)}
+    .t3{background:rgba(251,191,36,.15);color:var(--warn)}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin:1rem 0}
+    footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);font-size:.8rem;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow"><a href="index.html">← Learning Hub</a></div>
+    <h1>Tools Reference</h1>
+    <p>Every tool that helps you act on alerts — what it does, when to open it, and how it fits your automated stack.</p>
+
+    <p><span class="tier t1">Tier 1</span> Use on every trade &nbsp; <span class="tier t2">Tier 2</span> Daily &nbsp; <span class="tier t3">Tier 3</span> Paid / power user</p>
+
+    <h2>On every alert (non-negotiable)</h2>
+    <table>
+      <tr><th>Tool</th><th>URL</th><th>Use when</th></tr>
+      <tr>
+        <td><span class="tier t1">DexScreener</span><strong>Bubblemaps</strong></td>
+        <td><a href="https://dexscreener.com">dexscreener.com</a><br><a href="https://v2.bubblemaps.io">v2.bubblemaps.io</a></td>
+        <td><strong>Always.</strong> DexScreener: price, liq, volume, buys/sells. Bubblemaps: <strong>Clusters</strong> view — insider %.</td>
+      </tr>
+      <tr>
+        <td><span class="tier t1">Your Telegram bot</span></td>
+        <td>Your scanner</td>
+        <td>Primary inbox. Links in each alert go to DexScreener + Bubblemaps.</td>
+      </tr>
+    </table>
+
+    <h2>On-chain investigators (automated in X watcher)</h2>
+    <table>
+      <tr><th>Account / Tool</th><th>What they catch</th><th>In your watcher?</th></tr>
+      <tr><td><a href="https://x.com/bubblemaps">@bubblemaps</a></td><td>Cluster warnings, "this will be ugly" (LAB Jun 4)</td><td>✓ always alert</td></tr>
+      <tr><td><a href="https://x.com/lookonchain">@lookonchain</a></td><td>Team → CEX deposits, whale moves</td><td>✓ always alert</td></tr>
+      <tr><td><a href="https://x.com/EmberCN">@EmberCN</a></td><td>Insider wallets, MM activity</td><td>✓ always alert</td></tr>
+      <tr><td><a href="https://x.com/spotonchain">@spotonchain</a></td><td>Similar to Lookonchain</td><td>✓ always alert</td></tr>
+      <tr><td><a href="https://x.com/zachxbt">@zachxbt</a></td><td>Deep investigations (LAB 95% supply)</td><td>✓ always alert</td></tr>
+    </table>
+
+    <h2>Alpha hunters (your research list)</h2>
+    <table>
+      <tr><th>Account</th><th>Strength</th></tr>
+      <tr><td><a href="https://x.com/ataberk">@ataberk</a></td><td>Early CASHCAT Jul 5–7, Robinhood narrative</td></tr>
+      <tr><td><a href="https://x.com/merts_eth">@merts_eth</a></td><td>Jul 5 CASHCAT cultural narrative</td></tr>
+      <tr><td><a href="https://x.com/vladytenev">@vladytenev</a></td><td>Robinhood CEO — chain catalyst tweets</td></tr>
+      <tr><td><a href="https://x.com/MemeRetire">@MemeRetire</a></td><td>Robinhood runners, retirement thesis</td></tr>
+      <tr><td><a href="https://x.com/The__Solstice">@The__Solstice</a></td><td>Robinhood chain meta</td></tr>
+      <tr><td><a href="https://x.com/kilorippy">@kilorippy</a></td><td>Serenity DAO, RH watchlists</td></tr>
+      <tr><td><a href="https://x.com/boram992">@boram992</a></td><td>Early CASHCAT mentions</td></tr>
+    </table>
+
+    <h2>Market data &amp; derivatives</h2>
+    <table>
+      <tr><th>Tool</th><th>Tier</th><th>Use for</th></tr>
+      <tr><td><a href="https://www.coingecko.com/en/crypto-gainers">CoinGecko gainers</a></td><td><span class="tier t2">T2</span></td><td>Manual backup to scanner; +50% / mcap filter</td></tr>
+      <tr><td><a href="https://www.coinglass.com">Coinglass</a></td><td><span class="tier t2">T2</span></td><td>OI, funding, liquidations — pump or distribution</td></tr>
+      <tr><td><a href="https://www.tradingview.com">TradingView</a></td><td><span class="tier t2">T2</span></td><td>Charts, % alerts on watchlist symbols</td></tr>
+      <tr><td><a href="https://tokenunlocks.app">Token Unlocks</a></td><td><span class="tier t2">T2</span></td><td>Cliff dates — LAB Jul 14 style exits</td></tr>
+      <tr><td><a href="https://platform.arkhamintelligence.com">Arkham</a></td><td><span class="tier t3">T3</span></td><td>CEX inflow alerts, entity labels</td></tr>
+      <tr><td><a href="https://www.nansen.ai">Nansen</a></td><td><span class="tier t3">T3</span></td><td>Smart money flows (paid)</td></tr>
+    </table>
+
+    <h2>Listings &amp; new chain plays</h2>
+    <table>
+      <tr><th>Tool</th><th>Use for</th></tr>
+      <tr><td><a href="https://x.com/BinanceWallet">@BinanceWallet</a></td><td>Binance Alpha 4h countdown — early tokens</td></tr>
+      <tr><td>Binance app → Alpha</td><td>New perps / Alpha tokens before mainstream</td></tr>
+      <tr><td>DexScreener token profiles</td><td>Automated in your chain_watcher (Robinhood/BSC/SOL)</td></tr>
+    </table>
+
+    <h2>When to open which tool</h2>
+    <div class="card">
+      <table>
+        <tr><th>Alert type</th><th>Open first</th><th>Then</th></tr>
+        <tr><td>ELITE new token</td><td>DexScreener</td><td>Bubblemaps clusters → trade or skip</td></tr>
+        <tr><td>X $CASHTAG</td><td>Tweet link</td><td>DexScreener → Bubblemaps</td></tr>
+        <tr><td>VOL spike</td><td>DexScreener chart</td><td>Coinglass OI — pump or exit?</td></tr>
+        <tr><td>lookonchain CEX deposit</td><td>Don't buy</td><td>Short or close long</td></tr>
+        <tr><td>Bubblemaps warning</td><td>Exit</td><td>Don't open new longs</td></tr>
+        <tr><td>Scanner EXIT_WARNING</td><td>Coinglass</td><td>Reduce / short if perp listed</td></tr>
+      </table>
+    </div>
+
+    <h2>Built into your repo (automation)</h2>
+    <table>
+      <tr><th>File</th><th>Role</th></tr>
+      <tr><td><code>x_watcher.py</code></td><td>X timelines via FxTwitter API</td></tr>
+      <tr><td><code>chain_watcher.py</code></td><td>DexScreener profiles + volume</td></tr>
+      <tr><td><code>quality_gate.py</code></td><td>ELITE / WATCH / junk filter</td></tr>
+      <tr><td><code>scanner.py</code></td><td>CoinGecko + Binance OI</td></tr>
+      <tr><td><code>notifier.py</code></td><td>Telegram + desktop</td></tr>
+    </table>
+
+    <h2>Bookmark checklist</h2>
+    <ol>
+      <li>DexScreener</li>
+      <li>Bubblemaps V2</li>
+      <li>Coinglass</li>
+      <li>Token Unlocks</li>
+      <li>CoinGecko gainers</li>
+      <li>Your GitHub: <a href="https://github.com/behark/crypto-scanner">behark/crypto-scanner</a></li>
+      <li><a href="complete-workflow-guide.html">Complete Workflow Guide</a></li>
+    </ol>
+
+    <footer>
+      <p><a href="index.html">Learning Hub</a> · <a href="complete-workflow-guide.html">Workflow</a> · Jul 2026</p>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CASHCAT Case Study · Jul 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0b0f; --surface: #12141c; --border: rgba(255,255,255,0.07);
+      --text: #e8eaef; --muted: #8b92a8; --accent: #f59e0b; --accent-dim: rgba(245,158,11,0.12);
+      --rise: #6ee7b7; --fall: #f87171; --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; font-size: 15px; }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background: radial-gradient(ellipse 60% 40% at 30% -5%, rgba(245,158,11,0.1), transparent);
+      pointer-events: none;
+    }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 3rem 1.5rem 4rem; position: relative; z-index: 1; }
+    .eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    h1 { font-family: 'Instrument Serif', serif; font-size: clamp(2.2rem, 5vw, 3rem); font-weight: 400; margin-bottom: 1rem; }
+    h2 { font-family: 'Instrument Serif', serif; font-size: 1.7rem; font-weight: 400; margin: 2rem 0 1rem; }
+    p { color: #c5cad6; margin-bottom: 1rem; }
+    a { color: var(--accent); }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; }
+    .card.gold { border-color: rgba(245,158,11,0.3); background: linear-gradient(135deg, var(--surface), var(--accent-dim)); }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.75rem; margin: 1.25rem 0; }
+    .stat { background: #1a1d28; border: 1px solid var(--border); border-radius: 10px; padding: 1rem; text-align: center; }
+    .stat .v { font-family: 'Instrument Serif', serif; font-size: 1.5rem; display: block; }
+    .stat .v.up { color: var(--rise); } .stat .v.down { color: var(--fall); }
+    .stat .l { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 1rem 0; }
+    th, td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); text-align: left; }
+    th { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); background: #1a1d28; }
+    .timeline { border-left: 2px solid var(--border); margin: 1rem 0 1rem 1rem; padding-left: 1.25rem; }
+    .tl { margin-bottom: 1rem; }
+    .tl-date { font-size: 0.72rem; color: var(--accent); font-weight: 600; text-transform: uppercase; }
+    .compare { display: grid; gap: 1rem; }
+    @media (min-width: 600px) { .compare { grid-template-columns: 1fr 1fr; } }
+    .lab { border-left: 3px solid var(--fall); padding-left: 1rem; }
+    .cash { border-left: 3px solid var(--accent); padding-left: 1rem; }
+    footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow">Case Study · Robinhood Chain · Jul 2026</div>
+    <h1>CASHCAT — The merts_eth Call</h1>
+    <p>From <strong>$0.004</strong> (Jul 5) to <strong>$0.14</strong> (Jul 8) to ATH <strong>$0.228</strong> (Jul 11). How to spot the next one — and whether CASHCAT still has room.</p>
+
+    <div class="stat-grid">
+      <div class="stat"><span class="v up">35×</span><span class="l">Jul 5 → Jul 8</span></div>
+      <div class="stat"><span class="v up">$0.228</span><span class="l">ATH Jul 11</span></div>
+      <div class="stat"><span class="v down">-31%</span><span class="l">From ATH today</span></div>
+      <div class="stat"><span class="v">$155M</span><span class="l">Market cap</span></div>
+    </div>
+
+    <h2>What happened</h2>
+    <div class="timeline">
+      <div class="tl"><div class="tl-date">Jul 1, 2026</div>Robinhood Chain mainnet launches. Official stock tokens don't traction.</div>
+      <div class="tl"><div class="tl-date">Jul 5 — @merts_eth</div>Posts about AI agent buying "most culturally significant asset" on Robinhood chain → <strong>$CASHCAT at ~$0.004</strong>. Narrative: Robinhood's old working name was "CashCat."</div>
+      <div class="tl"><div class="tl-date">Jul 8</div>Vlad Tenev (Robinhood CEO) tweets chain is great for memes. <strong>+1,700% in 24h</strong> → ~$0.14, $120M mcap. @fluffycrypt giveaway post confirms hype peak.</div>
+      <div class="tl"><div class="tl-date">Jul 9–11</div>MEXC, WEEX, Hyperliquid perps list. OI +355% in 48h. ATH <strong>$0.228</strong>. One early buyer: $85 → $2.3M (bought Jun 18).</div>
+      <div class="tl"><div class="tl-date">Jul 13 — now</div>~$0.156, consolidating. -10% 24h. Still $10.6M DEX liquidity on Robinhood chain.</div>
+    </div>
+
+    <h2>LAB playbook vs CASHCAT — different animal</h2>
+    <div class="compare">
+      <div class="card lab">
+        <strong style="color:var(--fall)">LAB (insider rug)</strong>
+        <ul style="margin:0.5rem 0 0 1rem;color:#c5cad6">
+          <li>95% insider supply (ZachXBT)</li>
+          <li>Months of OTC / Bitget deposits</li>
+          <li>AI trading terminal narrative</li>
+          <li>Binance perps — predictable dump</li>
+        </ul>
+      </div>
+      <div class="card cash">
+        <strong style="color:var(--accent)">CASHCAT (narrative meme)</strong>
+        <ul style="margin:0.5rem 0 0 1rem;color:#c5cad6">
+          <li>New chain launch event (Jul 1)</li>
+          <li>CEO tweet = cultural catalyst</li>
+          <li>Community meme, not team tokenomics</li>
+          <li>Robinhood DEX + MEXC/Hyperliquid — not Binance</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card gold">
+      <strong>Why merts_eth was early (Jul 5)</strong>
+      <p style="margin:0.5rem 0 0">He caught <em>Phase 0</em> — new chain + cultural narrative before the CEO tweet. Scanner can't read X posts yet, but it <em>can</em> flag: new chain volume spikes (DexScreener), extreme 7d gainers, fresh CEX listings. That's the automation target for the next CASHCAT.</p>
+    </div>
+
+    <h2>Scanner verdict (live, Jul 13)</h2>
+    <table>
+      <tr><th>Metric</th><th>Value</th><th>Signal</th></tr>
+      <tr><td>Price</td><td>~$0.156</td><td>Below ATH, above $0.115 support</td></tr>
+      <tr><td>24h change</td><td>-5% to -10%</td><td>Pullback / consolidation</td></tr>
+      <tr><td>Vol / mcap</td><td>~0.22</td><td>Healthy, not distribution zone (&lt;0.45)</td></tr>
+      <tr><td>DEX 24h</td><td>9,560 buys / 6,779 sells</td><td>Still net buying bias</td></tr>
+      <tr><td>Binance perps</td><td>Not listed</td><td>Trade MEXC / Hyperliquid instead</td></tr>
+      <tr><td>Fake tokens</td><td>Solana clones exist</td><td>⚠ Only use contract below</td></tr>
+    </table>
+
+    <p><strong>Verified contract (Robinhood chain only):</strong><br>
+    <code>0x020bfC650A365f8BB26819deAAbF3E21291018b4</code></p>
+
+    <h2>Will it hit $1 again?</h2>
+    <p>From $0.156 → $1 = <strong>6.4×</strong>. Possible in a meme cycle but <strong>not guaranteed</strong>. Unlike SIREN's post-dump dispersal, CASHCAT still has real DEX liquidity and narrative. Key levels:</p>
+    <table>
+      <tr><th>Scenario</th><th>Target</th><th>Trigger</th></tr>
+      <tr><td style="color:var(--rise)">Bull</td><td>$0.22–0.28 retest</td><td>Hold $0.115, volume returns, Robinhood chain TVL stays high</td></tr>
+      <tr><td>Base</td><td>$0.12–0.18 chop</td><td>Current zone — wait for signal</td></tr>
+      <tr><td style="color:var(--fall)">Bear</td><td>$0.08–0.10</td><td>Break $0.115, chain hype fades, whale exit on DEX</td></tr>
+    </table>
+
+    <h2>Links</h2>
+    <ul>
+      <li><a href="https://v2.bubblemaps.io/map?address=0x020bfC650A365f8BB26819deAAbF3E21291018b4&chain=robinhood">Bubblemaps — CASHCAT</a></li>
+      <li><a href="https://dexscreener.com/robinhood/0xa70fc67c9f69da90b63a0e4c05d229954574e313">DexScreener</a></li>
+      <li><a href="https://x.com/merts_eth/status/2073854238690570703">merts_eth Jul 5 post</a></li>
+      <li><a href="index.html">All guides</a></li>
+      <li><a href="alert-spotting-guide.html">Alert & Spotting Guide</a></li>
+      <li><a href="low-float-playbook.html">Main Playbook</a></li>
+      <li><a href="complete-workflow-guide.html">Complete Workflow</a></li>
+    </ul>
+
+    <h2>Run scanner on CASHCAT</h2>
+    <div class="card" style="font-family:monospace;font-size:0.85rem;color:#a8b0c4">
+      cd ~/Documents/crypto-scanner<br>
+      .venv/bin/python scanner.py analyze cash-cat<br>
+      .venv/bin/python scanner.py watchlist
+    </div>
+
+    <footer>
+      <p>Not financial advice. Meme coins carry extreme risk — verify contract, avoid Solana fakes.</p>
+      <p style="margin-top:0.5rem"><a href="../README.md">crypto-scanner</a> · Updated Jul 13, 2026</p>
+    </footer>
+  </div>
+</body>
+</html>

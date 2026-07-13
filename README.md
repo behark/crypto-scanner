@@ -25,6 +25,17 @@ bash install.sh
 ./install_systemd.sh
 ```
 
+## Dashboard (Vercel)
+
+Web UI to edit config from anywhere: [`dashboard/`](dashboard/)
+
+```bash
+cd dashboard && npm run dev   # local
+# Deploy: Vercel → import repo → Root Directory: dashboard
+```
+
+See [dashboard/README.md](dashboard/README.md).
+
 ## Documentation
 
 | Guide | Description |

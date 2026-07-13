@@ -74,8 +74,8 @@ class Signal:
 
 
 def load_config() -> dict:
-    with open(ROOT / "config.yaml") as f:
-        return yaml.safe_load(f)
+    from config_loader import load_config_dict
+    return load_config_dict()
 
 
 def load_state(path: Path) -> dict:
